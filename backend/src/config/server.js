@@ -44,3 +44,24 @@ app.get('/missoes', async (req, res) => {
 app.listen(3000, () => {
     console.log('ligado')
 });
+
+app.post('/herois', async (req, res) => {
+    try {
+        const {
+            nome, classe, poder, avatar_url, id_guilda, id_usuario
+        } = req.body
+        await db.query(`INSERT INTO herois (nome, classe, poder, avatar_url, id_guilda, id_usuario)
+            VALUES (?, ?, ?, ?, ?, ?)`,
+            [nome, classe, poder, avatar_url, id_guilda, id_usuario]
+        );
+
+        res.status(201).json({
+            mensagem: 'Herói cadastrado com sucesso'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            erro: 'Erro ao cadastrar herói'
+        });
+    }
+});
