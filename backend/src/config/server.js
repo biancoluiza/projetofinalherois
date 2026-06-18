@@ -41,8 +41,47 @@ app.get('/missoes', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('ligado')
+
+app.post('/usuarios', async (req, res) => {
+    try {
+        const {
+            nome, email, senha
+        } = req.body
+        await db.query(`INSERT INTO usuarios (nome, email, senha) 
+            VALUES (?, ?, ?)`,
+        [nome, email, senha]
+    );
+
+    res.status(201).json({
+        mensagem:'Usuário cadastrado com sucesso!'
+    });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            erro: 'Erro ao cadastrar usuário'
+        });
+    }
+});
+
+app.post('/guildas', async (req, res) => {
+    try {
+        const {
+            nome, descricao
+        } = req.body
+        await db.query(`INSERT INTO guildas (nome, descricao)
+            VALUES (?, ?)`,
+        [nome, descricao]
+    );
+
+    res.status(201).json({
+        mensagem: 'Guilda cadastrada com sucesso!'
+    });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            erro: 'Erro ao cadastrar guilda'
+        })
+    }
 });
 
 app.post('/herois', async (req, res) => {
@@ -56,7 +95,7 @@ app.post('/herois', async (req, res) => {
         );
 
         res.status(201).json({
-            mensagem: 'Herói cadastrado com sucesso'
+            mensagem: 'Herói cadastrado com sucesso!'
         });
     } catch (error) {
         console.error(error);
@@ -64,4 +103,29 @@ app.post('/herois', async (req, res) => {
             erro: 'Erro ao cadastrar herói'
         });
     }
+});
+
+app.post('/missoes', async (req, res) => {
+    try {
+        const {
+            descricao, recompensa_ouro, id_heroi, status
+        } = req.body
+        await db.query(`INSERT INTO missoes (descricao, recompensa_ouro, id_heroi, status)
+            VALUES (?, ?, ?, ?)`,
+            [descricao, recompensa_ouro, id_heroi, status]
+        );
+
+        res.status(201).json ({
+            mensagem: 'Missão cadastrada com sucesso!'
+        });
+    } catch(error) {
+        console.error(error);
+        res.status(500).json ({
+            erro: 'Erro ao cadastrar missão'
+        });
+    }
+});
+
+app.listen(3000, () => {
+    console.log('ligado')
 });
