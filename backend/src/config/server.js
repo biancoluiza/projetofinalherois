@@ -206,7 +206,7 @@ app.put('/missoes/:id', async (req, res) => {
         await db.query(
             `UPDATE missoes
              SET descricao = ?, recompensa_ouro = ?, status = ?
-             WHERE id_missoes = ?`,
+             WHERE id_missao = ?`,
             [descricao, recompensa_ouro, status, id]
         );
 
@@ -218,6 +218,113 @@ app.put('/missoes/:id', async (req, res) => {
         console.error(error);
         res.status(500).json({
             erro: 'Erro ao atualizar missão'
+        });
+    }
+});
+
+app.delete('/usuarios/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await db.query(
+            'DELETE FROM usuarios WHERE id_usuario = ?',
+            [id]
+        );
+
+        res.json({
+            mensagem: 'Usuário excluído com sucesso!'
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            erro: 'Erro ao excluir usuário'
+        });
+    }
+});
+
+app.delete('/guildas/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await db.query(
+            'DELETE FROM guildas WHERE id_guilda = ?',
+            [id]
+        );
+
+        res.json({
+            mensagem: 'Guilda excluída com sucesso!'
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            erro: 'Erro ao excluir guilda'
+        });
+    }
+});
+
+app.delete('/herois/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await db.query(
+            'DELETE FROM herois WHERE id_heroi = ?',
+            [id]
+        );
+
+        res.json({
+            mensagem: 'Herói excluído com sucesso!'
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            erro: 'Erro ao excluir herói'
+        });
+    }
+});
+
+app.delete('/missoes/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await db.query(
+            'DELETE FROM missoes WHERE id_missao = ?',
+            [id]
+        );
+
+        res.json({
+            mensagem: 'Missão excluída com sucesso!'
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            erro: 'Erro ao excluir missão'
+        });
+    }
+});
+
+app.get('/herois-guildas', async (req, res) => {
+    try {
+        const [dados] = await db.query(`
+            SELECT
+                h.id_heroi,
+                h.nome AS heroi,
+                h.classe,
+                g.nome AS guilda
+            FROM herois h
+            INNER JOIN guildas g
+                ON h.id_guilda = g.id_guilda
+        `);
+
+        res.json(dados);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            erro: 'Erro ao buscar dados'
         });
     }
 });
