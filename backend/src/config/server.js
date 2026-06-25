@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const db = require('./db/db');
 
 const usuariosRoutes = require('../routes/usuariosRoutes');
@@ -7,7 +8,12 @@ const heroisRoutes = require('../routes/heroisRoutes');
 const missoesRoutes = require('../routes/missoesRoutes');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
+
+app.get('/', (req, res) => {
+    res.json({ mensagem: 'API do portal de heróis online' });
+});
 
 app.use('/usuarios', usuariosRoutes);
 app.use('/guildas', guildasRoutes);
@@ -217,7 +223,8 @@ app.get('/herois-guildas', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('ligado')
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`API rodando na porta ${PORT}`);
 });
 
